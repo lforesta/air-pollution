@@ -1,4 +1,5 @@
 import os
+import subprocess
 from osgeo import gdal
 import numpy as np
 
@@ -102,3 +103,16 @@ def generate_out_filepath(in_filepath, output_folder):
     var_name_short = filename[13:20].replace('_','')
     timestamp = filename[20:35]
     return output_folder + os.path.sep + var_name_short + '_' + timestamp + '.tif'
+    
+
+def merge_rasters(in_filenames, output_filename):
+    """
+    
+    """
+    
+    cmd_gdal_merge = " ".join([
+                                'gdal_merge.py', '-init 255 -o', output_filename, \
+                                '-n 9999' \
+                                ] + \
+                                ['"%s"' % in_filename for in_filename in in_filenames])
+    subprocess.check_output(cmd_gdal_merge, shell=True)
